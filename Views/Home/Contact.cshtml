@@ -1,5 +1,6 @@
 ﻿@model Web3_Assignment3_ContactUs.Models.ContactModel
-
+@using Microsoft.Extensions.Options
+@inject IOptions<Web3_Assignment3_ContactUs.Services.ReCAPTCHASettings> GoogleRecap
 @{
     ViewData["Title"] = "Contact";
 }
@@ -10,46 +11,58 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Contact">
+        <form asp-action="Contact" id="theForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
+                <input asp-for="FirstName" class="form-control formInput" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
+                <input asp-for="LastName" class="form-control formInput" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control formInput" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div>
                 <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" />
+                <input asp-for="PostalCode" class="form-control formInput" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
+                <input asp-for="Phone" class="form-control formInput" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Topic" class="control-label"></label>
-                <input asp-for="Topic" class="form-control" />
+                <select asp-for="Topic" class="form-control formInput formInput">
+                    <option value="Subject">Subject</option>
+                </select>
                 <span asp-validation-for="Topic" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
+                <label asp-for="Message" class="control-label">Questions and Comments</label>
                 <textarea asp-for="Message" class="form-control"></textarea>
-                <span asp-validation-for="Message" class="text-danger"></span>
+                <span asp-validation-for="Message" class="text-danger formInput"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Send" class="btn btn-primary" />
+                <div data-callback="enableBtn" id="reCaptcha" class="g-recaptcha" data-sitekey="@GoogleRecap.Value.ReCAPTCHA_Secret_Key"></div>
+                <div class="form-group">
+            <input type="submit" value="Send" class="btn btn-primary" id="submitBtn" disabled="disabled"/>
+            <input type="button" value="Reset" class="btn btn-primary" id="resetBtn" />
+        </div>
             </div>
+            @*<div class="form-group">
+                <input type="submit" value="Send" class="btn btn-primary" />
+                <input type="button" value="Reset" class="btn btn-primary" id="resetBtn" />
+            </div>*@
+
         </form>
     </div>
 </div>
@@ -60,4 +73,14 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script defer>
+        document.getElementById("resetBtn").addEventListener('click', (e) => {
+            document.getElementById('theForm').reset();
+
+        })
+        function enableBtn() {
+            document.getElementById('submitBtn').disabled = false;
+        }
+    </script>
 }

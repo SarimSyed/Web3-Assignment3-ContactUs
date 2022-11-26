@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Web3_Assignment3_ContactUs.Models;
 
 namespace Web3_Assignment3_ContactUs.Data
 {
@@ -12,5 +13,17 @@ namespace Web3_Assignment3_ContactUs.Data
             : base(options)
         {
         }
+
+        public DbSet<ContactModel> contacts { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            
+           
+        }
+
+
     }
 }

@@ -7,6 +7,15 @@ using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
+/*
+* Course: 		Web Programming 3
+* Assessment: 	Assignment XYZ
+* Created by: 	Sarim Syed
+* Date: 		9 Nov 2022
+* Class Name: 	SendGridEmailSender.cs
+* Description: Handles emails being sent so that they can be sent properly 
+       */
+
 
 namespace Web3_Assignment3_ContactUs.Services
 {
@@ -26,6 +35,7 @@ namespace Web3_Assignment3_ContactUs.Services
 
         public async Task SendGmailAsync(string email, string subject, string htmlMessage)
         {
+            
             await Execute(Options.APIKey, subject, htmlMessage, email);
         }
 
@@ -45,6 +55,12 @@ namespace Web3_Assignment3_ContactUs.Services
                 PlainTextContent = message,
                 HtmlContent = message
             };
+            //Temporarily hardcoding email
+            var from = new EmailAddress("a.sarimsyed@gmail.com", "The Company");
+            List<EmailAddress> emailAddresses = new List<EmailAddress>();
+            emailAddresses.Add(from);
+            
+            msg.AddCcs(emailAddresses);
             msg.AddTo(new EmailAddress(email));
 
             //Disable tracking settings
